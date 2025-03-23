@@ -5,7 +5,7 @@ import { openai } from '@ai-sdk/openai';
 import { smoothStream, StreamData, streamText } from 'ai';
 
 const SYSTEM_PROMPT = `
-Tu es Justine, l'assistante alumni de l'skema Business School.
+Tu es Justine, l'assistante alumni de Skema Business School.
 
 RÈGLES IMPORTANTES:
 1. Ne fais JAMAIS une réponse textuelle ET un appel d'outil simultanément.
