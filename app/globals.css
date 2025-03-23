@@ -1,0 +1,388 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 24, 24, 27;
+
+  --primary: 255, 255, 255;
+  --primary-foreground: 24, 24, 27;
+
+  --secondary: 82, 82, 91;
+  --secondary-foreground: 255, 255, 255;
+
+  --muted: 39, 39, 42;
+  --muted-foreground: 161, 161, 170;
+
+  --accent: 39, 39, 42;
+  --accent-foreground: 255, 255, 255;
+
+  --destructive: 220, 38, 38;
+  --destructive-foreground: 255, 255, 255;
+
+  --border: 39, 39, 42;
+  --input: 39, 39, 42;
+  --ring: 82, 82, 91;
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-zinc-900 text-zinc-100;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+}
+
+/* Custom scrollbar for a nice dark theme */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e4e4e4;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+/* Focus outline for accessibility */
+*:focus-visible {
+  outline: 2px solid #71717a;
+  outline-offset: 2px;
+}
+
+/* Animations for message transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Loading Shimmer effect for tool calling */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(39, 39, 42, 0.4) 0%,
+    rgba(63, 63, 70, 0.6) 50%,
+    rgba(39, 39, 42, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Add these styles to globals.css */
+
+/* Styling for alumni tables */
+.alumni-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #3f3f46;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.alumni-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.alumni-table th {
+  background-color: #3f3f46;
+  color: #e4e4e7;
+  font-weight: 500;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #52525b;
+}
+
+.alumni-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #3f3f46;
+}
+
+.alumni-table tr:nth-child(even) {
+  background-color: #27272a;
+}
+
+.alumni-table tr:nth-child(odd) {
+  background-color: #2d2d32;
+}
+
+.alumni-table tr:hover {
+  background-color: #3f3f46;
+}
+
+/* Better User message styling */
+.user-message {
+  background-color: #4f46e5;
+  border-radius: 16px;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  max-width: 80%;
+  align-self: flex-end;
+}
+
+/* Better Assistant message styling - removed background */
+.assistant-message {
+  border-radius: 16px;
+  border-top-left-radius: 4px;
+  color: #e4e4e7;
+  padding: 0.75rem 1rem;
+  max-width: 80%;
+  align-self: flex-start;
+}
+
+/* HTML content in messages */
+.alumni-html-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #3f3f46;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.alumni-html-content th {
+  background-color: #3f3f46;
+  color: #e4e4e7;
+  text-align: left;
+  padding: 0.75rem;
+  border: 1px solid #52525b;
+}
+
+.alumni-html-content td {
+  padding: 0.75rem;
+  border: 1px solid #3f3f46;
+  text-align: center;
+}
+
+.alumni-html-content td:first-child {
+  text-align: left;
+}
+
+.alumni-html-content tr:nth-child(even) {
+  background-color: #27272a;
+}
+
+.alumni-html-content tr:nth-child(odd) {
+  background-color: #2d2d32;
+}
+
+.alumni-html-content img {
+  border-radius: 50%;
+}
+
+/* Ajustements pour les liens LinkedIn dans les tables HTML */
+.alumni-html-content a.linkedin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #0077b5;
+  border-radius: 6px;
+  color: white;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.alumni-html-content a.linkedin-button:hover {
+  background-color: #005d8e;
+  transform: scale(1.1);
+}
+
+/* Email et téléphone en liens clickables */
+.alumni-html-content a.email-link,
+.alumni-html-content a.phone-link {
+  color: #60a5fa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.alumni-html-content a.email-link:hover,
+.alumni-html-content a.phone-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+/* Style amélioré pour l'animation de recherche */
+.tool-calling-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: rgba(39, 39, 42, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  max-width: max-content;
+  margin: 0 auto;
+}
+
+/* Style des boutons LinkedIn dans les tables */
+.linkedin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #0077b5;
+  border-radius: 6px;
+  color: white;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.linkedin-button:hover {
+  background-color: #005d8e;
+  transform: scale(1.1);
+}
+
+.linkedin-button:active {
+  transform: scale(0.95);
+}
+
+/* Ajustez les paragraphes dans les messages */
+.prose p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Enhanced text area */
+textarea {
+  font-family: inherit;
+  line-height: 1.5;
+  transition: height 0.2s ease;
+}
+
+textarea:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* Adjust scrollbar for message container */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
