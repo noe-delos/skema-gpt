@@ -11,8 +11,9 @@ import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
 import "katex/dist/katex.min.css";
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FormEvent, KeyboardEvent, memo, ReactNode, useEffect, useRef, useState } from 'react';
+import { PopupModal } from "react-calendly";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -129,14 +130,54 @@ export default function Page() {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isAdmin = searchParams.get('admin_access') === 'true';
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const rootElementRef = useRef<HTMLDivElement>(null);
   const [hoveringMessage, setHoveringMessage] = useState<string | null>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  const [showCalendly, setShowCalendly] = useState(false);
+  const [isClientSide, setIsClientSide] = useState(false);
 
   console.log(isAtBottom)
+  // Initialize message count from localStorage on component mount
+  useEffect(() => {
+    setIsClientSide(true);
+  }, []);
+
+  // Custom submit handler to check message quota
+  const customSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    // Get current message count from localStorage
+    const currentCount = parseInt(localStorage.getItem('userMessageCountSkema') || '0');
+
+    // Check if user is attempting to send a second message and is not an admin
+    if (currentCount >= 1 && !isAdmin) {
+      setShowCalendly(true);
+      return;
+    }
+
+    // Otherwise proceed with normal submission
+    handleSubmit(e);
+
+    // Update message count in localStorage
+    const newCount = currentCount + 1;
+    localStorage.setItem('userMessageCountSkema', newCount.toString());
+
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
+
+    // Ensure we scroll to bottom after submitting
+    setIsAtBottom(true);
+  };
+
   // Shorter French placeholder text
   const placeholder = "Rechercher des alumnis...";
 
@@ -230,17 +271,6 @@ export default function Page() {
     }
   };
 
-  // Handle form submission
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    handleSubmit(e);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-    }
-    // Ensure we scroll to bottom after submitting
-    setIsAtBottom(true);
-  };
-
   // Handle suggestion click - now also submits the form
   const handleSuggestion = (suggestion: string) => {
     if (textareaRef.current) {
@@ -300,7 +330,17 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full" ref={rootElementRef}>
+      {/* Calendly Popup Modal - Only render on client side and when rootElement is available */}
+      {isClientSide && showCalendly && (
+        <PopupModal
+          url="https://calendly.com/paul-ks-entreprise/30min"
+          rootElement={rootElementRef.current || document.body}
+          onModalClose={() => setShowCalendly(false)}
+          open={true}
+        />
+      )}
+
       {/* Header with logo and avatar */}
       <div className="w-full relative">
         <div className="max-w-5xl mx-auto px-4 py-3">
@@ -375,7 +415,7 @@ export default function Page() {
                   transition={{ delay: 0.3 }}
                   className="max-w-3xl mx-auto"
                 >
-                  <form ref={formRef} onSubmit={onSubmit} className="relative">
+                  <form ref={formRef} onSubmit={customSubmit} className="relative">
                     <textarea
                       ref={textareaRef}
                       value={input}
@@ -485,7 +525,7 @@ export default function Page() {
           >
             <div className="max-w-5xl mx-auto px-4 py-4">
               <div className="max-w-3xl mx-auto relative mb-5">
-                <form ref={formRef} onSubmit={onSubmit} className="relative">
+                <form ref={formRef} onSubmit={customSubmit} className="relative">
                   <textarea
                     ref={textareaRef}
                     value={input}
